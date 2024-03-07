@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, url_for, redirect
 import firebase_admin
 from flask_cors import CORS
 from firebase_admin import auth, credentials, firestore
@@ -103,6 +103,17 @@ def fetch_rooms():
     return jsonify({'rooms': rooms}), 200
   except Exception as e:
     return jsonify({'error': str(e)}), 500
-  
+
+@app.route('/join-room/<room_id>', methods=['GET'])
+def join_room(room_id):
+    # Implement logic for joining room
+    # For now, let's redirect to a welcome page
+    return redirect(url_for('welcome', room_id=room_id))
+
+@app.route('/welcome/<room_id>', methods=['GET'])
+def welcome(room_id):
+    # Render a welcome page or return a welcome message
+    return jsonify({'message': f'Welcome to Room {room_id}'}), 200
+ 
 if __name__ == '__main__':
     app.run(debug=True)

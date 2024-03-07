@@ -1,69 +1,64 @@
 import React, { useState, useEffect } from 'react';
+import '../App.css'; // Import CSS for styling
 
-function Dashboard() {
- const [rooms, setRooms] = useState([]);
- const [newRoomName, setNewRoomName] = useState('');
- const [newRoomDescription, setNewRoomDescription] = useState('');
- const [message, setMessage] = useState('');
+const Dashboard = () => {
+  const [rooms, setRooms] = useState([]);
+  const [newRoomName, setNewRoomName] = useState('');
+  const [newRoomDescription, setNewRoomDescription] = useState('');
+  const [message, setMessage] = useState('');
+  const [selectedRoom, setSelectedRoom] = useState(null);
 
- useEffect(() => {
+  useEffect(() => {
     fetchRooms();
- }, []);
+  }, []);
 
- const fetchRooms = () => {
+  const fetchRooms = () => {
     fetch('http://127.0.0.1:5000/fetch-rooms')
       .then(response => response.json())
       .then(data => {
-        setRooms(data.rooms);
+        setRooms(data.rooms.map(room => ({
+          ...room,
+          joined: false, // Add joined property
+        })));
       })
       .catch(error => {
         console.error('Error fetching rooms:', error);
       });
- };
+  };
 
- const createRoom = async () => {
-  try {
-    const response = await fetch('http://127.0.0.1:5000/create-room', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ name: newRoomName, description: newRoomDescription }),
-    });
+  const createRoom = async () => {
+    try {
+      const response = await fetch('http://127.0.0.1:5000/create-room', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ name: newRoomName, description: newRoomDescription }),
+      });
 
-    const data = await response.json();
-    setMessage(data.message); // Update message state with success message
-    setNewRoomName('');
-    setNewRoomDescription('');
-    fetchRooms(); // Refresh rooms list after creating a new room
-  } catch (error) {
-    console.error('Error creating room:', error);
-    setMessage('Failed to create room. Please try again.'); // Set error message
-  }
-};
+      const data = await response.json();
+      setMessage(data.message); // Update message state with success message
+      setNewRoomName('');
+      setNewRoomDescription('');
+      fetchRooms(); // Refresh rooms list after creating a new room
+    } catch (error) {
+      console.error('Error creating room:', error);
+      setMessage('Failed to create room. Please try again.'); // Set error message
+    }
+  };
 
-//  const createRoom = () => {
-//     fetch('http://127.0.0.1:5000/create-room', {
-//       method: 'POST',
-//       headers: {
-//         'Content-Type': 'application/json',
-//       },
-//       body: JSON.stringify({ name: newRoomName, description: newRoomDescription }),
-//     })
-//       .then(response => response.json())
-//       .then(data => {
-//         setMessage(data.message); // Update message state with success message
-//         setNewRoomName('');
-//         setNewRoomDescription('');
-//         fetchRooms(); // Refresh rooms list after creating a new room
-//       })
-//       .catch(error => {
-//         console.error('Error creating room:', error);
-//       });
-//  };
+  const toggleRoomDetails = (roomId) => {
+    setSelectedRoom(selectedRoom === roomId ? null : roomId);
+  };
 
- return (
-    <div>
+  const joinRoom = (roomId) => {
+    // Placeholder for joining room functionality
+    console.log(`Joining room with ID: ${roomId}`);
+    // You can implement joining room functionality here
+  };
+
+  return (
+    <div className="dashboard-container">
       <h2>Create New Room</h2>
       <input
         type="text"
@@ -81,16 +76,28 @@ function Dashboard() {
       <p>{message}</p> {/* Display the message here */}
 
       <h2>Rooms</h2>
-      <ul>
+      <div className="rooms-container">
         {rooms.map(room => (
-          <li key={room.id}>
-            <span>{room.name}</span>
-            {/* Implement join room functionality */}
-          </li>
+          <div key={room.id} className="room-container">
+            <div className="room-header" onClick={() => toggleRoomDetails(room.id)}>
+              <span className="room-name">{room.name}</span>
+              {selectedRoom === room.id && (
+                <button className="join-button" onClick={() => joinRoom(room.id)}>
+                  Join
+                </button>
+              )}
+            </div>
+            {selectedRoom === room.id && (
+              <div className="room-details">
+                <p>{room.description}</p>
+                <p>Created at: {room.created_at}</p>
+              </div>
+            )}
+          </div>
         ))}
-      </ul>
+      </div>
     </div>
- );
-}
+  );
+};
 
 export default Dashboard;
