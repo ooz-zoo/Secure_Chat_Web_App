@@ -9,7 +9,9 @@ const Dashboard = () => {
   const [selectedRoom, setSelectedRoom] = useState(null);
 
   useEffect(() => {
-    fetchRooms();
+    fetchRooms(); // Fetch rooms when component mounts
+    const interval = setInterval(fetchRooms, 215000); // Poll rooms every 5 seconds
+    return () => clearInterval(interval); // Cleanup interval on component unmount
   }, []);
 
   const fetchRooms = () => {
@@ -40,7 +42,6 @@ const Dashboard = () => {
       setMessage(data.message); // Update message state with success message
       setNewRoomName('');
       setNewRoomDescription('');
-      fetchRooms(); // Refresh rooms list after creating a new room
     } catch (error) {
       console.error('Error creating room:', error);
       setMessage('Failed to create room. Please try again.'); // Set error message
@@ -52,9 +53,8 @@ const Dashboard = () => {
   };
 
   const joinRoom = (roomId) => {
-    // Placeholder for joining room functionality
-    console.log(`Joining room with ID: ${roomId}`);
-    // You can implement joining room functionality here
+    // Navigate to the ChatRoom component with the roomId as a URL parameter
+    window.location.href = `/chat-room/${roomId}`;
   };
 
   return (
@@ -83,7 +83,7 @@ const Dashboard = () => {
               <span className="room-name">{room.name}</span>
               {selectedRoom === room.id && (
                 <button className="join-button" onClick={() => joinRoom(room.id)}>
-                  Join
+                 Join
                 </button>
               )}
             </div>

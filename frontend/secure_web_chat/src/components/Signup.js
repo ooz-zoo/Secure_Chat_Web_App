@@ -1,9 +1,9 @@
 // import React, { useState } from 'react';
-// import { Link, withRouter } from 'react-router-dom';
+// import { Link } from 'react-router-dom';
 // import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 // import { faUser, faEnvelope, faLock } from '@fortawesome/free-solid-svg-icons';
 
-// function Signup({ history }) {
+// function Signup() {
 //   const [username, setUsername] = useState('');
 //   const [email, setEmail] = useState('');
 //   const [password, setPassword] = useState('');
@@ -45,7 +45,7 @@
 //         setEmail('');
 //         setPassword('');
 //         // Redirect to login page after successful signup
-//         history.push('/login');
+//         window.location.href = '/login';
 //       })
 //       .catch(error => {
 //         setMessage('Error: ' + error.message);
@@ -96,8 +96,7 @@
 //   );
 // }
 
-// export default withRouter(Signup);
-
+// export default Signup;
 
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
@@ -105,19 +104,17 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser, faEnvelope, faLock } from '@fortawesome/free-solid-svg-icons';
 
 function Signup() {
-  const [username, setUsername] = useState('');
+  const [nickname, setNickname] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
 
   const validateEmail = () => {
-    // Regular expression for email validation
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailPattern.test(email);
   };
 
   const validatePassword = () => {
-    // Check if password is at least 8 characters long
     return password.length >= 8;
   };
 
@@ -137,15 +134,14 @@ function Signup() {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ username, email, password }),
+      body: JSON.stringify({ nickname, email, password }),
     })
       .then(response => response.json())
       .then(data => {
         setMessage(data.message);
-        setUsername('');
+        setNickname('');
         setEmail('');
         setPassword('');
-        // Redirect to login page after successful signup
         window.location.href = '/login';
       })
       .catch(error => {
@@ -161,9 +157,9 @@ function Signup() {
           <FontAwesomeIcon icon={faUser} className="username-icon" />
           <input 
             type="text" 
-            placeholder="Username" 
-            value={username} 
-            onChange={e => setUsername(e.target.value)} 
+            placeholder="Nickname" 
+            value={nickname} 
+            onChange={e => setNickname(e.target.value)} 
             className="username-input" 
           />
         </div>
