@@ -49,7 +49,7 @@ def signup():
     
     
 # final_nickname = None  # Initialize the variable with None
-@app.route('/login', methods=['POST', 'GET'])
+@app.route('/login', methods=['POST'])
 def login():
     if request.method == 'POST':
         data = request.get_json()
@@ -74,9 +74,9 @@ def login():
         except Exception as e:
             return jsonify({'error': 'Invalid email or password'}), 401
     
-    elif request.method == 'GET':
-        # Handle GET request (e.g., render a login form or provide information)
-        return jsonify({'message': 'Login page'}), 200
+    # elif request.method == 'GET':
+    #     # Handle GET request (e.g., render a login form or provide information)
+    #     return jsonify({'message': 'Login page'}), 200
 
 
 def get_user_nickname(email):
