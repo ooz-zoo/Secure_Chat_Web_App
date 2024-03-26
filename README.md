@@ -1,8 +1,7 @@
 # Secure Chat Web Application
 
-# Web App Screens functioning
+![image](https://github.com/ooz-zoo/Secure_Chat_Web_App/assets/111248086/d0aaca50-35b7-4bff-bc13-da37275fc199)
 
-# Entry point
 ![image](https://github.com/ooz-zoo/Secure_Chat_Web_App/assets/111248086/615682d3-dc91-4931-890f-65763f6abce9)
 
 ![image](https://github.com/ooz-zoo/Secure_Chat_Web_App/assets/111248086/df7b9c16-4db4-4128-b853-e3a4d5d77c05)
